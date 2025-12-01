@@ -21,22 +21,22 @@
 
 // C23, external definition
 #if defined(static_assert)
-    // Already defined by compiler
+   // Already defined by compiler
 
 // C11 / C17 / C22
 #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
-    #define static_assert(expr, msg) \
-        _Static_assert(expr, msg)
+   #define static_assert(expr, msg) \
+      _Static_assert(expr, msg)
 
 // Pre-C11 GCC, Clang, Intel
 #elif defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER) || defined(__INTEL_CLANG_COMPILER)
-    #define static_assert(expr, msg) \
-        typedef char __static_assert_##__FILE__##at##__LINE__[(expr) ? 1 : -1]
+   #define static_assert(expr, msg) \
+      typedef char __static_assert_##__FILE__##at##__LINE__[(expr) ? 1 : -1]
 
 // Fallback
 #else
-    #warning "Warning: static_assert(expr, msg) cannot be enforced"
-    #define static_assert(expr, msg) ((void)0)
+   #warning "Warning: static_assert(expr, msg) cannot be enforced"
+   #define static_assert(expr, msg) ((void)0)
 
 #endif
 
@@ -57,31 +57,31 @@
 // C11 and above
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
 
-    // GCC, Clang, Intel, IBM XL, SunCC, Green Hills
-    #if defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER) || defined(__INTEL_CLANG_COMPILER) || defined(__IBMC__) || defined(__xlC__) || defined(__SUNPRO_C) || defined(__ghs__)
-        #define assert_type(expr, type) \
-            _Static_assert(__builtin_types_compatible_p(__typeof__(expr), type), "Type mismatch")
-    
-    // Fallback
-    #else
-        #define assert_type(expr, type) \
-            _Static_assert(_Generic((expr), type: 1, default: 0), "Type mismatch")
-    
-    #endif
+   // GCC, Clang, Intel, IBM XL, SunCC, Green Hills
+   #if defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER) || defined(__INTEL_CLANG_COMPILER) || defined(__IBMC__) || defined(__xlC__) || defined(__SUNPRO_C) || defined(__ghs__)
+      #define assert_type(expr, type) \
+         _Static_assert(__builtin_types_compatible_p(__typeof__(expr), type), "Type mismatch")
+   
+   // Fallback
+   #else
+      #define assert_type(expr, type) \
+         _Static_assert(_Generic((expr), type: 1, default: 0), "Type mismatch")
+   
+   #endif
 
 // C99 and above untill C11
 #else
 
-    // GCC, Clang, Intel
-    #if defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER) || defined(__INTEL_CLANG_COMPILER)
-        #define assert_type(expr, type) \
-            typedef char __assert_type_##__FILE__##at##__LINE__[__builtin_types_compatible_p(__typeof__(expr), type) ? 1 : -1]
-    
-    // Fallback
-    #else
-        #warning "Warning: assert_type(expr, type) cannot be enforced"
-        #define assert_type(expr, type) ((void)0)
-    #endif
+   // GCC, Clang, Intel
+   #if defined(__GNUC__) || defined(__clang__) || defined(__INTEL_COMPILER) || defined(__INTEL_CLANG_COMPILER)
+      #define assert_type(expr, type) \
+         typedef char __assert_type_##__FILE__##at##__LINE__[__builtin_types_compatible_p(__typeof__(expr), type) ? 1 : -1]
+   
+   // Fallback
+   #else
+      #warning "Warning: assert_type(expr, type) cannot be enforced"
+      #define assert_type(expr, type) ((void)0)
+   #endif
 
 #endif /* (__STDC_VERSION__ >= 201112L) */
 
@@ -123,11 +123,11 @@
  */
 
 #if (__STDC_VERSION__ >= 201112L)
-    #define assert_istype(type) \
-        _Static_assert(!!sizeof((type*)0), #type " is not a type")
+   #define assert_istype(type) \
+      _Static_assert(!!sizeof((type*)0), #type " is not a type")
 #else  // C99 fallback
-    #define assert_istype(type) \
-        typedef char assert_fail_not_a_type##__FILE__##at##__LINE__[(sizeof((type*)0)) ? 1 : -1]
+   #define assert_istype(type) \
+      typedef char assert_fail_not_a_type##__FILE__##at##__LINE__[(sizeof((type*)0)) ? 1 : -1]
 #endif
 
 

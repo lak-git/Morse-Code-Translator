@@ -13,7 +13,7 @@ DEFINE_DEQUE(double, size_t, DOUBLE_DEQUE_INIT_SIZE)
 /* Date deque */
 typedef struct
 {
-	uint16_t year;
+   uint16_t year;
 	uint8_t month;
 	uint8_t day;
 } date_s;
