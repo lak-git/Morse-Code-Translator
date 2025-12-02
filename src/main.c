@@ -35,9 +35,6 @@ int main(int argc, char const *argv[])
     }
     populate_morse_tree(root);
 
-    printf("Morse Code Dictionary:\n");
-    morse_tree_print(root);
-
     char* input_message = NULL;
     int mode = -1; // 1: Morse->Alnum, 2: Alnum->Morse */
 
@@ -58,7 +55,7 @@ int main(int argc, char const *argv[])
             return 1;
         }
         if (mode == 1) {
-            printf("Enter Morse message (letters separated by spaces, words by /):\n");
+            printf("\nEnter Morse message (letters separated by spaces, words by /):\n");
             size_t cap = 0;
             ssize_t linelen = getline(&input_message, &cap, stdin);
             if (linelen <= 0) input_message = NULL;
@@ -70,7 +67,7 @@ int main(int argc, char const *argv[])
                 }
             }
         } else if (mode == 2) {
-            printf("Enter alphabetical text to convert (letters & spaces):\n");
+            printf("\nEnter alphabetical text to convert (letters & spaces):\n");
             size_t cap = 0;
             ssize_t linelen = getline(&input_message, &cap, stdin);
             if (linelen <= 0) input_message = NULL;
@@ -102,21 +99,10 @@ int main(int argc, char const *argv[])
 
         printf("\nOriginal Morse Code: %s\n", input_message);
 
-        // char* reverse_str = reverse_string(input_message);
-        // if (!reverse_str)
-        // { 
-        //     fprintf(stderr, "Memory error\n");
-        //     free(input_message);
-        //     morse_tree_delete(root);
-        //     return 1;
-        // }
-        // printf("Reversed Morse Code: %s\n", reverse_str);
-
         char* decoded = morse_decode(root, input_message);
         printf("Decoded Message: %s\n", decoded ? decoded : "(null)\n");
 
         free(decoded);
-        // free(reverse_str);
         free(input_message);
     } else if (mode == 2) {
         // Alphabetical -> Morse */
