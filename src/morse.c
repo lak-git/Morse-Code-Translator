@@ -183,7 +183,6 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
     bool not_uppercase = !isupper(alnum_character);
     char ch = not_uppercase ? toupper(alnum_character) : alnum_character;
 
-    BTreeNode* current = root;
     queue(Node) queue;
     queue_init(Node, &queue);
     Node initial = { .node = root, .morse_code = malloc(sizeof(char)) };
@@ -192,7 +191,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
     { 
         fprintf(stderr, "Memory allocation failed\n");
         queue_delete(Node, &queue);
-        return; 
+        return NULL; 
     }
     initial.morse_code[0] = '\0';
 
@@ -202,7 +201,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
         fprintf(stderr, "Queue enqueue failed.\n");
         free(initial.morse_code);
         queue_delete(Node, &queue);
-        return;
+        return NULL;
     }
 
     while (!queue_empty(Node, &queue))
@@ -268,7 +267,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
         free(morse_code);
     }
     queue_delete(Node, &queue);
-    return;
+    return NULL;
 }
 
 char* reverse_string(const char* string)

@@ -21,11 +21,11 @@ typedef struct Node
 
 #define NODE_STACK_INIT_SIZE 16
 #define NODE_STACK_GROWTH_FACTOR 2
-DEFINE_STACK(Node, size_t, NODE_STACK_INIT_SIZE);
+DEFINE_STACK(Node, size_t, NODE_STACK_INIT_SIZE)
 
 #define NODE_QUEUE_INIT_SIZE 16
 #define NODE_QUEUE_GROWTH_FACTOR 2
-DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE);
+DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE)
 
 
 BTreeNode* morse_tree_init(void);
