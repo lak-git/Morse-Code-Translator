@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 
-bool valid_StackNode (StackNode s)
+bool valid_StackNode (Node sn)
 {
-    (void)s;
+    (void)sn;
     return true;
 }
 
-GENERATE_STACK(StackNode, size_t, STACKNODE_STACK_INIT_SIZE, STACKNODE_STACK_GROWTH_FACTOR, valid_StackNode, malloc, realloc, free);
+GENERATE_STACK(Node, size_t, NODE_STACK_INIT_SIZE, NODE_STACK_GROWTH_FACTOR, valid_StackNode, malloc, realloc, free);

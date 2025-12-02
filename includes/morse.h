@@ -3,24 +3,37 @@
 
 #include "stack.h"
 #include <stddef.h>
+#include "queue.h"
 
+
+typedef struct BTreeNode
+{
+    char* alpha_character; // Alphabetic character or \0
+    struct BTreeNode* left; // dot (.)
+    struct BTreeNode* right; // dash (-)
+} BTreeNode;
 
 typedef struct Node
 {
-    char* alpha_character; // Alphabetic character or \0
-    struct Node* left;
-    struct Node* right;
+    BTreeNode* node;
+    char* morse_code;
 } Node;
 
-typedef struct StackNode
-{
-    Node* node;
-    char* morse_code;
-} StackNode;
+#define NODE_STACK_INIT_SIZE 16
+#define NODE_STACK_GROWTH_FACTOR 2
+DEFINE_STACK(Node, size_t, NODE_STACK_INIT_SIZE);
 
-#define STACKNODE_STACK_INIT_SIZE 16
-#define STACKNODE_STACK_GROWTH_FACTOR 2
-DEFINE_STACK(StackNode, size_t, STACKNODE_STACK_INIT_SIZE);
+#define NODE_QUEUE_INIT_SIZE 16
+#define NODE_QUEUE_GROWTH_FACTOR 2
+DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE);
 
 
-#endif MORSE_H
+BTreeNode* morse_tree_init(void);
+void morse_tree_delete(BTreeNode* root);
+void morse_tree_insert(BTreeNode* root, const char* morse_code, char alpha_character);
+void morse_tree_print(BTreeNode* root);
+bool is_valid_morse_message(const char* message);
+char decode_letter(BTreeNode* root, const char* morse_code);
+
+
+#endif // MORSE_H
