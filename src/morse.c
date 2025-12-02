@@ -58,29 +58,34 @@ void morse_tree_insert(BTreeNode* root, const char* morse_code, char alnum_chara
 //Print morse code dictionary
 void morse_tree_print(BTreeNode* root)
 {
-    stack(Node) stack;
-    stack_init(Node, &stack);
-    Node initial = { .node = root, .morse_code = "" };
+    if (!root) return;
 
-    if (!initial.morse_code)
+    stack(Node) node_stack;
+    stack_init(Node, &node_stack);
+
+    char* empty = malloc(sizeof(char));
+    if (!empty)
     {
         fprintf(stderr, "Memory allocation failed\n");
-        stack_delete(Node, &stack);
+        stack_delete(Node, &node_stack);
         return;
     }
-    bool not_succesfully_added = !stack_push(Node, &stack, initial);
+    empty[0] = '\0';
+    Node initial = { .node = root, .morse_code = empty };
+
+    bool not_succesfully_added = !stack_push(Node, &node_stack, initial);
     if (not_succesfully_added)
     {
         fprintf(stderr, "Stack push failed.\n");
         free(initial.morse_code);
-        stack_delete(Node, &stack);
+        stack_delete(Node, &node_stack);
         return;
     }
 
-    while (!stack_empty(Node, &stack))
+    while (!stack_empty(Node, &node_stack))
     {
-        Node current = stack_peek(Node, &stack);
-        stack_pop(Node, &stack);
+        Node current = stack_peek(Node, &node_stack);
+        stack_pop(Node, &node_stack);
 
         BTreeNode* node = current.node;
         char* morse_code = current.morse_code;
@@ -102,7 +107,7 @@ void morse_tree_print(BTreeNode* root)
             right_str[len + 1] = '\0';
 
             Node reverse_node = { .node = node->right, .morse_code = right_str };
-            bool unsuccessful_push = !stack_push(Node, &stack, reverse_node);
+            bool unsuccessful_push = !stack_push(Node, &node_stack, reverse_node);
             if (unsuccessful_push)
             {
                 fprintf(stderr, "Stack push failed.\n");
@@ -119,7 +124,7 @@ void morse_tree_print(BTreeNode* root)
             left_str[len + 1] = '\0';
 
             Node dot_node = { .node = node->left, .morse_code = left_str };
-            bool unsuccessful_push = !stack_push(Node, &stack, dot_node);
+            bool unsuccessful_push = !stack_push(Node, &node_stack, dot_node);
             if (unsuccessful_push)
             {
                 fprintf(stderr, "Stack push failed.\n");
@@ -128,7 +133,7 @@ void morse_tree_print(BTreeNode* root)
         }
         free(morse_code);
     }
-    stack_delete(Node, &stack);
+    stack_delete(Node, &node_stack);
 }
 
 bool is_valid_morse_message(const char* message)
@@ -136,7 +141,7 @@ bool is_valid_morse_message(const char* message)
     for (size_t i = 0; i < strlen(message); i++)
     {
         char ch = message[i];
-        if (ch != '.' && ch != '-' && ch != ' ') { return false; }
+        if (ch != '.' && ch != '-' && ch != ' ' && ch != '/') { return false; }
     }
     return true;
 }
@@ -167,31 +172,32 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
     bool not_uppercase = !isupper(alnum_character);
     char ch = not_uppercase ? toupper(alnum_character) : alnum_character;
 
-    queue(Node) queue;
-    queue_init(Node, &queue);
-    Node initial = { .node = root, .morse_code = malloc(sizeof(char)) };
+    queue(Node) node_queue;
+    queue_init(Node, &node_queue);
 
-    if (!initial.morse_code)
-    { 
+    char* empty = malloc(sizeof(char));
+    if (!empty)
+    {
         fprintf(stderr, "Memory allocation failed\n");
-        queue_delete(Node, &queue);
-        return NULL; 
+        queue_delete(Node, &node_queue);
+        return NULL;
     }
-    initial.morse_code[0] = '\0';
+    empty[0] = '\0';
+    Node initial = { .node = root, .morse_code = empty };
 
-    bool unsuccessful_enqueue = !queue_enque(Node, &queue, initial);
+    bool unsuccessful_enqueue = !queue_enque(Node, &node_queue, initial);
     if (unsuccessful_enqueue)
     {
         fprintf(stderr, "Queue enqueue failed.\n");
-        free(initial.morse_code);
-        queue_delete(Node, &queue);
+        free(empty);
+        queue_delete(Node, &node_queue);
         return NULL;
     }
 
-    while (!queue_empty(Node, &queue))
+    while (!queue_empty(Node, &node_queue))
     {
-        Node current = queue_peek(Node, &queue);
-        queue_deque(Node, &queue);
+        Node current = queue_peek(Node, &node_queue);
+        queue_deque(Node, &node_queue);
 
         BTreeNode* node = current.node;
         char* morse_code = current.morse_code;
@@ -203,13 +209,13 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
             if (!result)
             {
                 free(morse_code);
-                queue_delete(Node, &queue);
+                queue_delete(Node, &node_queue);
                 return NULL;
             }
             MEMORY_COPY(result, morse_code, len);
             result[len] = '\0';
             free(morse_code);
-            queue_delete(Node, &queue);
+            queue_delete(Node, &node_queue);
             return result;
         }
         if (node->left)
@@ -222,7 +228,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
                 left_str[len] = '.';
                 left_str[len + 1] = '\0';
                 Node left_node = { .node = node->left, .morse_code = left_str };
-                bool unsuccessful_enqueue = !queue_enque(Node, &queue, left_node);
+                bool unsuccessful_enqueue = !queue_enque(Node, &node_queue, left_node);
                 if (unsuccessful_enqueue)
                 {
                     fprintf(stderr, "Queue enqueue failed.\n");
@@ -240,7 +246,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
                 right_str[len] = '-';
                 right_str[len + 1] = '\0';
                 Node right_node = { .node = node->right, .morse_code = right_str };
-                bool unsuccessful_enqueue = !queue_enque(Node, &queue, right_node);
+                bool unsuccessful_enqueue = !queue_enque(Node, &node_queue, right_node);
                 if (unsuccessful_enqueue)
                 {
                     fprintf(stderr, "Queue enqueue failed.\n");
@@ -250,7 +256,7 @@ char* encode_letter(BTreeNode* root, const char alnum_character)
         }
         free(morse_code);
     }
-    queue_delete(Node, &queue);
+    queue_delete(Node, &node_queue);
     return NULL;
 }
 
@@ -268,7 +274,6 @@ char* reverse_string(const char* string)
 char* morse_decode(BTreeNode* root, const char* morse_message)
 {
     if (!root || !morse_message) { return NULL; }
-
     size_t cap = 256;
     size_t len = 0;
     char* output = malloc(cap);
@@ -281,7 +286,7 @@ char* morse_decode(BTreeNode* root, const char* morse_message)
 
     const char* ptr = morse_message;
     bool first_word = true;
-    while (ptr)
+    while (*ptr)
     {
         const char* segment_end = ptr;
         while (*segment_end && *segment_end != '/') segment_end++;

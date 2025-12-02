@@ -102,21 +102,21 @@ int main(int argc, char const *argv[])
 
         printf("\nOriginal Morse Code: %s\n", input_message);
 
-        char* reverse_str = reverse_string(input_message);
-        if (!reverse_str)
-        { 
-            fprintf(stderr, "Memory error\n");
-            free(input_message);
-            morse_tree_delete(root);
-            return 1;
-        }
-        printf("Reversed Morse Code: %s\n", reverse_str);
+        // char* reverse_str = reverse_string(input_message);
+        // if (!reverse_str)
+        // { 
+        //     fprintf(stderr, "Memory error\n");
+        //     free(input_message);
+        //     morse_tree_delete(root);
+        //     return 1;
+        // }
+        // printf("Reversed Morse Code: %s\n", reverse_str);
 
-        char* decoded = morse_decode(root, reverse_str);
+        char* decoded = morse_decode(root, input_message);
         printf("Decoded Message: %s\n", decoded ? decoded : "(null)\n");
 
         free(decoded);
-        free(reverse_str);
+        // free(reverse_str);
         free(input_message);
     } else if (mode == 2) {
         // Alphabetical -> Morse */

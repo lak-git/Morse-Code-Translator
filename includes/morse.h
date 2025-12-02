@@ -30,7 +30,7 @@ DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE)
 
 BTreeNode* morse_tree_init(void);
 void morse_tree_delete(BTreeNode* root);
-void morse_tree_insert(BTreeNode* root, const char* morse_code, char alpha_character);
+void morse_tree_insert(BTreeNode* root, const char* morse_code, char alnum_character);
 void morse_tree_print(BTreeNode* root);
 bool is_valid_morse_message(const char* message);
 char* reverse_string(const char* string);
