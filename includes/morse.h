@@ -8,7 +8,7 @@
 
 typedef struct BTreeNode
 {
-    char* alpha_character; // Alphabetic character or \0
+    char alnum_character; // Alphabetic character or \0
     struct BTreeNode* left; // dot (.)
     struct BTreeNode* right; // dash (-)
 } BTreeNode;
@@ -33,7 +33,11 @@ void morse_tree_delete(BTreeNode* root);
 void morse_tree_insert(BTreeNode* root, const char* morse_code, char alpha_character);
 void morse_tree_print(BTreeNode* root);
 bool is_valid_morse_message(const char* message);
+char* reverse_string(const char* string);
 char decode_letter(BTreeNode* root, const char* morse_code);
+char* encode_letter(BTreeNode* root, const char alnum_character);
+char* morse_decode(BTreeNode* root, const char* morse_message);
+char* morse_encode(BTreeNode* root, const char* text_message);
 
 
 #endif // MORSE_H
