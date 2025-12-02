@@ -48,7 +48,9 @@ int main(int argc, char const *argv[])
         mode = 1;
     } else {
         /* interactive prompt for mode */
-        printf("\nChoose mode:\n1) Morse code -> Alphabetical\n2) Alphabetical -> Morse code\nEnter 1 or 2: ");
+        printf("\nChoose mode:\n");
+        printf("1) Morse code -> Alphabetical\n2) Alphabetical -> Morse code\n3) Print Dictionary\n");
+        printf("Enter 1, 2 or 3: ");
         if (scanf("%d%*c", &mode) != 1) {
             fprintf(stderr, "Invalid input\n");
             morse_tree_delete(root);
@@ -77,6 +79,11 @@ int main(int argc, char const *argv[])
                     input_message[--n] = '\0';
                 }
             }
+        } else if (mode == 3)
+        {
+            printf("\nMorse Code Dictionary:\n");
+            morse_tree_print(root);
+            return 0;
         } else {
             fprintf(stderr, "Unknown mode\n");
             morse_tree_delete(root);

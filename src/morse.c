@@ -55,6 +55,98 @@ void morse_tree_insert(BTreeNode* root, const char* morse_code, char alnum_chara
     current->alnum_character = alnum_character;
 }
 
+//Print morse code dictionary
+void morse_tree_print(BTreeNode* root)
+{
+    if (!root) return;
+
+    stack(Node) node_stack;
+    stack_init(Node, &node_stack);
+
+    char* empty = malloc(sizeof(char));
+    if (!empty)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        stack_delete(Node, &node_stack);
+        return;
+    }
+    empty[0] = '\0';
+    Node initial = { .node = root, .morse_code = empty };
+
+    bool not_succesfully_added = !stack_push(Node, &node_stack, initial);
+    if (not_succesfully_added)
+    {
+        fprintf(stderr, "Stack push failed.\n");
+        free(empty);
+        stack_delete(Node, &node_stack);
+        return;
+    }
+
+    while (!stack_empty(Node, &node_stack))
+    {
+        Node current = stack_peek(Node, &node_stack);
+        stack_pop(Node, &node_stack);
+
+        BTreeNode* node = current.node;
+        char* morse_code = current.morse_code;
+
+        bool not_empty_character = node->alnum_character != '\0';
+        if (not_empty_character)
+        {
+            printf("Character: %c, Morse Code: %s\n", node->alnum_character, morse_code);
+        }
+
+        // Push right child (dash) first so left is processed first
+        if (node->right)
+        {
+            size_t len = strlen(morse_code);
+            char* right_str = malloc(len + 2); // +1 for '-' and +1 for '\0'
+            if (!right_str)
+            {
+                fprintf(stderr, "Memory allocation failed\n");
+                return;
+            } else
+            {
+                MEMORY_COPY(right_str, morse_code, len);
+                right_str[len] = '-';
+                right_str[len + 1] = '\0';
+
+                Node reverse_node = { .node = node->right, .morse_code = right_str };
+                bool unsuccessful_push = !stack_push(Node, &node_stack, reverse_node);
+                if (unsuccessful_push)
+                {
+                    fprintf(stderr, "Stack push failed.\n");
+                    free(right_str);
+                }
+            }
+        }
+        if (node->left)
+        {
+            size_t len = strlen(morse_code);
+            char* left_str = malloc(len + 2); // +1 for '.' and +1 for '\0'
+            if (!left_str)
+            {
+                fprintf(stderr, "Memory allocation failed\n");
+                return;
+            } else
+            {
+                MEMORY_COPY(left_str, morse_code, len);
+                left_str[len] = '.';
+                left_str[len + 1] = '\0';
+
+                Node dot_node = { .node = node->left, .morse_code = left_str };
+                bool unsuccessful_push = !stack_push(Node, &node_stack, dot_node);
+                if (unsuccessful_push)
+                {
+                    fprintf(stderr, "Stack push failed.\n");
+                    free(left_str);
+                }
+            }
+        }
+    }
+    stack_delete(Node, &node_stack);
+}
+
 bool is_valid_morse_message(const char* message)
 {
     for (size_t i = 0; i < strlen(message); i++)
