@@ -1,6 +1,25 @@
 #define _GNU_SOURCE
-#include "morse.c"
+#include "morse.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
+
+
+static const char* MORSE_CODE_SEQUENCE[] = {
+    ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..",
+    ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.",
+    "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----",
+    "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----"
+};
+
+static const char ALPHABET[] = {
+    'A','B','C','D','E','F','G','H','I','J','K','L','M',
+    'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+    '0','1','2','3','4','5','6','7','8','9'
+};
+
+static const size_t ALPHABET_SIZE = sizeof(ALPHABET) / sizeof(ALPHABET[0]);
 
 void populate_morse_tree(BTreeNode* root);
 char* read_file(const char* filename);
