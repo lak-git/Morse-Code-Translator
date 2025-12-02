@@ -21,16 +21,16 @@ typedef struct Node
 
 #define NODE_STACK_INIT_SIZE 16
 #define NODE_STACK_GROWTH_FACTOR 2
-DEFINE_STACK(Node, size_t, NODE_STACK_INIT_SIZE);
+DEFINE_STACK(Node, size_t, NODE_STACK_INIT_SIZE)
 
 #define NODE_QUEUE_INIT_SIZE 16
 #define NODE_QUEUE_GROWTH_FACTOR 2
-DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE);
+DEFINE_QUEUE(Node, size_t, NODE_QUEUE_INIT_SIZE)
 
 
 BTreeNode* morse_tree_init(void);
 void morse_tree_delete(BTreeNode* root);
-void morse_tree_insert(BTreeNode* root, const char* morse_code, char alpha_character);
+void morse_tree_insert(BTreeNode* root, const char* morse_code, char alnum_character);
 void morse_tree_print(BTreeNode* root);
 bool is_valid_morse_message(const char* message);
 char* reverse_string(const char* string);
